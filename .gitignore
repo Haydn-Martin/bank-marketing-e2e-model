@@ -1,0 +1,11 @@
+# IDE Settings
+.idea/
+
+# Virtual environment
+venv/
+
+# Personal notes file
+Notes.txt
+
+# Poetry
+poetry.lock
