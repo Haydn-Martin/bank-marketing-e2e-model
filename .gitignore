@@ -9,3 +9,6 @@ Notes.txt
 
 # Poetry
 poetry.lock
+
+# Jupyter notebook checkpoints
+*.ipynb_checkpoints/
