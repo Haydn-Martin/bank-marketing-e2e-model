@@ -12,3 +12,6 @@ poetry.lock
 
 # Jupyter notebook checkpoints
 *.ipynb_checkpoints/
+
+# Jupyter testing notebook
+testing.ipynb

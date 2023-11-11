@@ -47,13 +47,9 @@ class SaveRawTrainingData:
     '''
 
     def save_raw_training_data(self):
-        # File path to store data
-        try:
-            # File path to store data
-            file_path = os.path.join(self.raw_data_store_path,
-                                     'raw_training_data.csv')
-            # Save pandas df as csv to this dir
-            self.raw_training_df.to_csv(file_path,
-                                        index=False)
-        except Exception as e:
-            print(f"Error saving file: {e}")
+         # File path to store data
+        file_path = os.path.join(self.raw_data_store_path,
+                                 'raw_training_data.csv')
+        # Save pandas df as csv to this dir
+        self.raw_training_df.to_csv(file_path,
+                                    index=False)

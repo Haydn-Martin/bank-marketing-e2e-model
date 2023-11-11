@@ -1,0 +1,27 @@
+# UCI Repo
+uci_repo:
+  uci_repo_code: 222
+
+# Data Configuration
+data:
+  raw_data_path: bank_marketing_e2e_model/data/raw_training_data.csv
+  train_data_path: bank_marketing_e2e_model/data/train.csv
+  test_data_path: bank_marketing_e2e_model/data/test.csv
+
+# Model Configuration
+model:
+  algorithm: logistic_regression
+  hyperparameters:
+    C: 0.5
+    random_state: 420
+
+# Evaluation Configuration
+evaluation:
+  metric: auc_roc
+
+# Output Configuration
+output:
+  model_output_path: bank_marketing_e2e_model/models/model
+  performance_output_path: bank_marketing_e2e_model/models/model_performance/
+  metadata_output_path: bank_marketing_e2e_model/models/model_metadata/
+
