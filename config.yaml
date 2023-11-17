@@ -10,18 +10,10 @@ data:
 
 # Model Configuration
 model:
-  algorithm: logistic_regression
   hyperparameters:
     C: 0.5
     random_state: 420
 
-# Evaluation Configuration
-evaluation:
-  metric: auc_roc
-
 # Output Configuration
 output:
-  model_output_path: bank_marketing_e2e_model/models/model
-  performance_output_path: bank_marketing_e2e_model/models/model_performance/
-  metadata_output_path: bank_marketing_e2e_model/models/model_metadata/
-
+  model_info_path: bank_marketing_e2e_model/models/

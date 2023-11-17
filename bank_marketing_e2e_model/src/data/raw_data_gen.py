@@ -5,7 +5,7 @@ import os
 
 
 class FetchUCIData:
-    def __init__(self, uci_repo):
+    def __init__(self, uci_repo: int):
         self.uci_repo = uci_repo
     '''
     A class to fetch data from UCI using the python package fetch_ucirepo.
@@ -35,7 +35,7 @@ class FetchUCIData:
 
 
 class SaveRawTrainingData:
-    def __init__(self, raw_training_df, raw_data_store_path):
+    def __init__(self, raw_training_df: DataFrame, raw_data_store_path: str):
         self.raw_training_df = raw_training_df
         self.raw_data_store_path = raw_data_store_path
     '''
@@ -47,7 +47,7 @@ class SaveRawTrainingData:
     '''
 
     def save_raw_training_data(self):
-         # File path to store data
+        # File path to store data
         file_path = os.path.join(self.raw_data_store_path,
                                  'raw_training_data.csv')
         # Save pandas df as csv to this dir

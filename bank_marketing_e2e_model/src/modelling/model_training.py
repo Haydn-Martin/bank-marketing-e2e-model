@@ -1,5 +1,8 @@
+from ..utils.utils import save_df_to_path
+
 import pandas as pd
-from pathlib import Path
+import joblib
+import os
 
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
@@ -10,11 +13,13 @@ from sklearn.pipeline import Pipeline
 
 
 class TrainingPipeline:
-    def __init__(self, hyper_params, raw_data_path, train_data_path, test_data_path):
+    def __init__(self, hyper_params: dict, raw_data_path: str, train_data_path: str,
+                 test_data_path: str, model_info_path: str):
         self.hyper_params = hyper_params
         self.raw_data_path = raw_data_path
         self.train_data_path = train_data_path
         self.test_data_path = test_data_path
+        self.model_info_path = model_info_path
 
     '''
     A class to fetch training data and use a specified model configuration
@@ -22,7 +27,8 @@ class TrainingPipeline:
 
     Methods:
         data_split: Fetches raw training data and saves to training and test data 
-        train_model: Trains a logistic regression model on training data
+        train_model: Trains a logistic regression model on training 
+        save_model: Saves the model pipeline in binary format in a specified directory
     '''
 
     def data_split(self, test_size: float = 0.3, random_state: int = 420):
@@ -39,16 +45,10 @@ class TrainingPipeline:
                                                             random_state=random_state)
         # Save training data in appropriate file path
         x_train['target'] = y_train  # add target
-        Path(self.train_data_path).parent.mkdir(parents=True,
-                                                exist_ok=True)  # create file path
-        x_train.to_csv(self.train_data_path,
-                       index=False)  # save to file path
+        save_df_to_path(x_train, self.train_data_path)
         # Save test data in appropriate file path
         x_test['target'] = y_test  # add target
-        Path(self.test_data_path).parent.mkdir(parents=True,
-                                               exist_ok=True)  # create file path
-        x_test.to_csv(self.test_data_path,
-                      index=False)  # save to file path
+        save_df_to_path(x_test, self.test_data_path)
 
     def train_model(self) -> Pipeline:
         # Read training data
@@ -81,3 +81,10 @@ class TrainingPipeline:
         pipeline.fit(x_training, y_training)
         # Return pipeline
         return pipeline
+
+    def save_model(self):
+        # Save model pipeline for making inferences
+        joblib.dump(self.train_model(),
+                    os.path.join(self.model_info_path,
+                                 'model',
+                                 'log_reg_pipeline.joblib'))
