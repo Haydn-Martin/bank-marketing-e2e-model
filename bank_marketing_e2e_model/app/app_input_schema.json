@@ -1,0 +1,164 @@
+{
+  "age": {
+    "type": "int64",
+    "properties": {
+      "minAge": 1,
+      "maxAge": 150
+    }
+  },
+  "job": {
+    "type": "object",
+    "properties": {
+      "categorical_column": {
+        "type": "str",
+        "enum": [
+          "blue-collar",
+          "management",
+          "technician",
+          "admin.",
+          "services",
+          "retired",
+          "self-employed",
+          "entrepreneur",
+          "unemployed",
+          "housemaid",
+          "student"
+        ]
+      }
+    }
+  },
+  "marital": {
+    "type": "object",
+    "properties": {
+      "categorical_column": {
+        "type": "str",
+        "enum": [
+          "married",
+          "single",
+          "divorced"
+        ]
+      }
+    }
+  },
+  "education": {
+    "type": "object",
+    "properties": {
+      "categorical_column": {
+        "type": "str",
+        "enum": [
+          "primary",
+          "secondary",
+          "tertiary"
+        ]
+      }
+    }
+  },
+  "default": {
+    "type": "object",
+    "properties": {
+      "categorical_column": {
+        "type": "str",
+        "enum": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  "balance": {
+    "type": "int64",
+    "properties": {
+      "minBalance": 0
+    }
+  },
+  "loan": {
+    "type": "object",
+    "properties": {
+      "categorical_column": {
+        "type": "str",
+        "enum": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  "contact": {
+    "type": "object",
+    "properties": {
+      "categorical_column": {
+        "type": "str",
+        "enum": [
+          "cellular",
+          "telephone"
+        ]
+      }
+    }
+  },
+  "day_of_week": {
+    "type": "int64",
+    "properties": {
+      "minDay": 1,
+      "maxDay": 31
+    }
+  },
+  "month": {
+    "type": "object",
+    "properties": {
+      "categorical_column": {
+        "type": "str",
+        "enum": [
+          "jan",
+          "feb",
+          "mar",
+          "apr",
+          "may",
+          "june",
+          "july",
+          "aug",
+          "sep",
+          "oct",
+          "nov",
+          "dec"
+        ]
+      }
+    }
+  },
+  "duration": {
+    "type": "int64",
+    "properties": {
+      "minBalance": 0
+    }
+  },
+  "campaign": {
+    "type": "int64",
+    "properties": {
+      "minCampaign": 1
+    }
+  },
+  "pdays": {
+    "type": "int64",
+    "properties": {
+      "minPdays": -1
+    }
+  },
+  "previous": {
+    "type": "int64",
+    "properties": {
+      "minPrevious": 0
+    }
+  },
+  "poutcome": {
+    "type": "object",
+    "properties": {
+      "categorical_column": {
+        "type": "str",
+        "enum": [
+          "success",
+          "failure",
+          "other"
+        ]
+      }
+    }
+  }
+}
