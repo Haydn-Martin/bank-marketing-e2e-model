@@ -1,6 +1,6 @@
 # UCI Repo
 uci_repo:
-  uci_repo_code: 222
+  uci_repo_code: 348273923908294
 
 # Data Configuration
 data:
@@ -16,4 +16,9 @@ model:
 
 # Output Configuration
 output:
-  model_info_path: bank_marketing_e2e_model/models/
+  model_path: bank_marketing_e2e_model/models/model/model_pipeline.joblib
+  model_performance_path: bank_marketing_e2e_model/models/model_performance/model_metrics.json
+
+# App Configuration
+app:
+  app_input_schema_path: bank_marketing_e2e_model/app/app_input_schema.json

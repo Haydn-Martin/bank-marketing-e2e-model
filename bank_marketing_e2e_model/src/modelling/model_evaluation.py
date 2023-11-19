@@ -2,16 +2,17 @@ import os
 import json
 from numpy import ndarray
 import pandas as pd
+import joblib
 
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import roc_auc_score
 
 
 class EvaluationPipeline:
-    def __init__(self, log_reg_pipeline: Pipeline, test_data_path: str, model_info_path: str):
-        self.log_reg_pipeline = log_reg_pipeline
+    def __init__(self, model_pipeline: Pipeline, test_data_path: str, model_metrics_path: str):
+        self.model_pipeline = model_pipeline
         self.test_data_path = test_data_path
-        self.model_info_path = model_info_path
+        self.model_metrics_path = model_metrics_path
 
     '''
     A class to evaluate a logistic regression model based on a given metric
@@ -28,8 +29,10 @@ class EvaluationPipeline:
         test_data = pd.read_csv(self.test_data_path)
         # Get x test to make predictions on
         x_test = test_data.drop(columns=['target'])
+        # Load pipeline
+        loaded_model_pipe = joblib.load(self.model_pipeline)
         # Use pipeline to make predictions
-        return self.log_reg_pipeline.predict(x_test)
+        return loaded_model_pipe.predict(x_test)
 
     def evaluate_predictions(self) -> float:
         # Read test data
@@ -42,14 +45,10 @@ class EvaluationPipeline:
         return roc_auc_score(y_test, preds)
 
     def save_model_performance(self):
-        # Save model performance
-        eval_score_path = os.path.join(self.model_info_path,
-                                       'model_performance',
-                                       'model_metrics.json')
         # Create evaluation dict
         eval_dict = {
             'roc_auc': self.evaluate_predictions()
         }
         # Save in JSON format
-        with open(eval_score_path, 'w') as metrics_file:
+        with open(self.model_metrics_path, 'w') as metrics_file:
             json.dump(eval_dict, metrics_file)

@@ -71,6 +71,18 @@
       "minBalance": 0
     }
   },
+  "housing": {
+    "type": "object",
+    "properties": {
+      "categorical_column": {
+        "type": "str",
+        "enum": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
   "loan": {
     "type": "object",
     "properties": {

@@ -2,7 +2,6 @@ from ..utils.utils import save_df_to_path
 
 import pandas as pd
 import joblib
-import os
 
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
@@ -14,12 +13,12 @@ from sklearn.pipeline import Pipeline
 
 class TrainingPipeline:
     def __init__(self, hyper_params: dict, raw_data_path: str, train_data_path: str,
-                 test_data_path: str, model_info_path: str):
+                 test_data_path: str, model_path: str):
         self.hyper_params = hyper_params
         self.raw_data_path = raw_data_path
         self.train_data_path = train_data_path
         self.test_data_path = test_data_path
-        self.model_info_path = model_info_path
+        self.model_path = model_path
 
     '''
     A class to fetch training data and use a specified model configuration
@@ -85,6 +84,4 @@ class TrainingPipeline:
     def save_model(self):
         # Save model pipeline for making inferences
         joblib.dump(self.train_model(),
-                    os.path.join(self.model_info_path,
-                                 'model',
-                                 'log_reg_pipeline.joblib'))
+                    self.model_path)
