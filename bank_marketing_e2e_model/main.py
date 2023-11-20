@@ -63,8 +63,6 @@ st.write('Import trained model, evaluate given metric, and save performance.')
 # Evaluate trained model
 if st.button('Evaluate Current Model'):
     try:
-        # Get model pipeline path
-        model_path = os.path.join(config['output']['model_info_path'], '/model/model_pipeline.joblib')
         # Evaluate current model and save evaluation metric
         EvaluationPipeline(
             model_pipeline=config['data']['model_path'],
