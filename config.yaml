@@ -22,3 +22,4 @@ output:
 # App Configuration
 app:
   app_input_schema_path: bank_marketing_e2e_model/app/app_input_schema.json
+  chrome_driver_path: bank_marketing_e2e_model/app/chromedriver.exe
