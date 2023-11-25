@@ -1,12 +1,24 @@
+"""
+This is a unit test for testing the functionality of the streamlit web page.
+
+The test selects an option from an inference data point and
+verifies that entry is as expected.
+"""
+
+
+import time
+
 import unittest
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-import time
-
 
 class WebPageDropUnitTest(unittest.TestCase):
+    """
+    This class specifies the drop-down unit test
+    for the streamlit web page.
+    """
 
     # Set up
     def setUp(self):
@@ -37,7 +49,8 @@ class WebPageDropUnitTest(unittest.TestCase):
         # Get result
         result = driver.find_element(
             By.XPATH,
-            '/html/body/div/div[1]/div[1]/div/div/div/section/div[1]/div/div/div[14]/div/div/div/div[1]/div[1]'
+            '/html/body/div/div[1]/div[1]/div/div/div/section/'
+            'div[1]/div/div/div[14]/div/div/div/div[1]/div[1]'
         ).text
         # Define the expected output
         expected_output = 'management'

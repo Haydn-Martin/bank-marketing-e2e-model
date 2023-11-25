@@ -1,9 +1,19 @@
-import streamlit as st
-import joblib
-import yaml
+"""
+This module runs the app.
+
+It loads a local web page using streamlit that you can use
+to import data, train a model, evaluate it, and use it
+to make inferences on inputted data.
+"""
+
+
 import os
 import json
+import yaml
+import joblib
 import pandas as pd
+
+import streamlit as st
 
 from src.data.raw_data_gen import FetchUCIData, SaveRawTrainingData
 from src.modelling.model_training import TrainingPipeline
@@ -12,7 +22,7 @@ from src.modelling.model_evaluation import EvaluationPipeline
 
 # Load config
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # Get parent dir
-with open(os.path.join(parent_dir, 'config.yaml'), 'r') as config_file:
+with open(os.path.join(parent_dir, 'config.yaml'), 'r', encoding='utf-8') as config_file:
     config = yaml.safe_load(config_file)  # Load config file
 
 # Page Title
@@ -28,11 +38,13 @@ if st.button('Import'):
     try:
         uci_data = FetchUCIData(uci_repo=config['uci_repo']['uci_repo_code']).format_data()
         # Display the raw data
-        st.success(f'Raw data successfully imported!')
+        st.success('Raw data successfully imported!')
         st.write(uci_data)
         # Save formatted data
-        SaveRawTrainingData(raw_training_df=uci_data,
-                            raw_data_store_path=config['data']['raw_data_path']).save_raw_training_data()
+        SaveRawTrainingData(
+            raw_training_df=uci_data,
+            raw_data_store_path=config['data']['raw_data_path']
+        ).save_raw_training_data()
     except Exception as e:
         st.error(f"An error occurred in saving UCI data: {e}")
 
@@ -70,7 +82,11 @@ if st.button('Evaluate Current Model'):
             model_metrics_path=config['output']['model_metrics_path']
         ).save_model_performance()
         # Load metrics JSON as dict
-        with open(config['output']['model_performance_path'], 'r') as metrics_json:
+        with open(
+                config['output']['model_performance_path'],
+                'r',
+                encoding='utf-8'
+        ) as metrics_json:
             metrics_dict = json.load(metrics_json)
         # Return metrics
         st.success(f'Current model has an roc_auc score of {metrics_dict["roc_auc"]}')
@@ -83,7 +99,11 @@ st.subheader('Make Predictions')
 st.write('Use saved model to make predictions on new data inputs.')
 
 # Load input schema to make a prediction
-with open(config['app']['app_input_schema_path'], 'r') as input_schema_json:
+with open(
+        config['app']['app_input_schema_path'],
+        'r',
+        encoding='utf-8'
+) as input_schema_json:
     input_schema = json.load(input_schema_json)
 # Add feature input buttons for numerical variables
 new_data = {}  # Create empty dict to add features to
@@ -94,8 +114,10 @@ for feature in input_schema.keys():
                                         step=1,
                                         format='%i')
     if input_schema[feature]['type'] == 'object':
-        feature_value = st.selectbox(label=feature,
-                                     options=input_schema[feature]['properties']['categorical_column']['enum'])
+        feature_value = st.selectbox(
+            label=feature,
+            options=input_schema[feature]['properties']['categorical_column']['enum']
+        )
     new_data[feature] = feature_value
 
 # Make a prediction using these inputs
@@ -109,10 +131,10 @@ if st.button('Predict'):
         prediction = loaded_model_pipe.predict(inference_df)
         # Format prediction
         if prediction[0] == 0:
-            pred_display = 'This customer will subscribe.'
+            PRED_DISPLAY = 'This customer will subscribe.'
         if prediction[0] == 1:
-            pred_display = 'This customer will not subscribe.'
+            PRED_DISPLAY = 'This customer will not subscribe.'
         # Display the prediction
-        st.success(pred_display)
+        st.success(PRED_DISPLAY)
     except Exception as e:
         st.error(f"An error occurred in making a prediction: {e}")
