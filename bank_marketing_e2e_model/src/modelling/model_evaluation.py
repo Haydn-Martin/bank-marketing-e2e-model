@@ -1,4 +1,8 @@
-import os
+"""
+Contains classes that evaluate a trained model.
+"""
+
+
 import json
 from numpy import ndarray
 import pandas as pd
@@ -9,22 +13,23 @@ from sklearn.metrics import roc_auc_score
 
 
 class EvaluationPipeline:
+    """
+    A class to evaluate a logistic regression model based on a given metric
+    and save model characteristics in a given directory.
+
+    Methods:
+        make_predictions: Uses an sklearn pipeline and test features to make predictions
+        evaluate_predictions: Evaluates pipeline predictions using the roc_auc metric
+        save_model_performance: Saves the model evaluation score in a given directory
+    """
+
     def __init__(self, model_pipeline: Pipeline, test_data_path: str, model_metrics_path: str):
         self.model_pipeline = model_pipeline
         self.test_data_path = test_data_path
         self.model_metrics_path = model_metrics_path
 
-    '''
-    A class to evaluate a logistic regression model based on a given metric
-    and save model characteristics in a given directory.
-
-    Methods:
-        make_predictions: Uses an sklearn pipeline and test features to make predictions 
-        evaluate_predictions: Evaluates pipeline predictions using the roc_auc metric
-        save_model_performance: Saves the model evaluation score in a given directory
-    '''
-
     def make_predictions(self) -> ndarray:
+        """Uses an sklearn pipeline and test features to make predictions"""
         # Read test data
         test_data = pd.read_csv(self.test_data_path)
         # Get x test to make predictions on
@@ -35,6 +40,7 @@ class EvaluationPipeline:
         return loaded_model_pipe.predict(x_test)
 
     def evaluate_predictions(self) -> float:
+        """Evaluates pipeline predictions using the roc_auc metric"""
         # Read test data
         test_data = pd.read_csv(self.test_data_path)
         # Get y test to evaluate predictions
@@ -45,10 +51,11 @@ class EvaluationPipeline:
         return roc_auc_score(y_test, preds)
 
     def save_model_performance(self):
+        """Saves the model evaluation score in a given directory"""
         # Create evaluation dict
         eval_dict = {
             'roc_auc': self.evaluate_predictions()
         }
         # Save in JSON format
-        with open(self.model_metrics_path, 'w') as metrics_file:
+        with open(self.model_metrics_path, 'w', encoding='utf-8') as metrics_file:
             json.dump(eval_dict, metrics_file)

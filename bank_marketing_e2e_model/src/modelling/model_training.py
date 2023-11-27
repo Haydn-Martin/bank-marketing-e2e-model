@@ -1,4 +1,8 @@
-from ..utils.utils import save_df_to_path
+"""
+Contains classes that train a logistic
+regression model.
+"""
+
 
 import pandas as pd
 import joblib
@@ -10,8 +14,19 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 
+from ..utils.utils import save_df_to_path
+
 
 class TrainingPipeline:
+    """
+    A class to fetch training data and use a specified model configuration
+    to train a logistic regression to predict if a client will subscribe to a term deposit.
+
+    Methods:
+        data_split: Fetches raw training data and saves to training and test data
+        train_model: Trains a logistic regression model on training
+        save_model: Saves the model pipeline in binary format in a specified directory
+    """
     def __init__(self, hyper_params: dict, raw_data_path: str, train_data_path: str,
                  test_data_path: str, model_path: str):
         self.hyper_params = hyper_params
@@ -20,17 +35,8 @@ class TrainingPipeline:
         self.test_data_path = test_data_path
         self.model_path = model_path
 
-    '''
-    A class to fetch training data and use a specified model configuration
-    to train a logistic regression to predict if a client will subscribe to a term deposit.
-
-    Methods:
-        data_split: Fetches raw training data and saves to training and test data 
-        train_model: Trains a logistic regression model on training 
-        save_model: Saves the model pipeline in binary format in a specified directory
-    '''
-
     def data_split(self, test_size: float = 0.3, random_state: int = 420):
+        """Fetches raw training data and saves to training and test data"""
         # Read raw training data
         raw_training_data = pd.read_csv(self.raw_data_path)
         # Get features
@@ -50,6 +56,7 @@ class TrainingPipeline:
         save_df_to_path(x_test, self.test_data_path)
 
     def train_model(self) -> Pipeline:
+        """Trains a logistic regression model on training"""
         # Read training data
         all_training = pd.read_csv(self.train_data_path)
         # Split to x and y
@@ -82,6 +89,7 @@ class TrainingPipeline:
         return pipeline
 
     def save_model(self):
+        """Saves the model pipeline in binary format in a specified directory"""
         # Save model pipeline for making inferences
         joblib.dump(self.train_model(),
                     self.model_path)

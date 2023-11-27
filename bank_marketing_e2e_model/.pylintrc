@@ -1,0 +1,9 @@
+[MAIN]
+disable=
+    broad-exception-caught,
+    too-few-public-methods,
+    missing-module-docstring,
+    relative-beyond-top-level,
+    too-many-arguments,
+    use-dict-literal,
+    import-error

@@ -22,10 +22,14 @@ RUN python -m pip install -r requirements.txt
 COPY /bank_marketing_e2e_model .
 
 # MyPy for static type checking
-RUN mypy --explicit-package-bases --ignore-missing-imports /app/src/
+RUN mypy --explicit-package-bases --ignore-missing-imports /app/src
 
 # Run Pylint for linting
-RUN pylint /app
+RUN pylint --rcfile=/app/.pylintrc /app/src/data/raw_data_gen.py \
+                                   /app/src/modelling/* \
+                                   /app/src/utils/utils.py \
+                                   /app/tests/* \
+                                   /app/main.py
 
 # Run unit tests
 RUN python -m unittest discover /app/tests
@@ -34,4 +38,4 @@ RUN python -m unittest discover /app/tests
 EXPOSE 8501
 
 # Run the application.
-CMD streamlit run main.py
+CMD streamlit run /app/main.py

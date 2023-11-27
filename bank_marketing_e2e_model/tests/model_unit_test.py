@@ -15,27 +15,33 @@ import pandas as pd
 
 class ModelUnitTest(unittest.TestCase):
     """
-    This class specifies the model inference unit test.
+    A class to perform a unit test on model inference.
+
+    Methods:
+        load_model_pipeline: Loads a model pipeline from a specified dir
+        test_inference: Tests model inference on an obvious example
     """
 
     # Static method for loading config
     @staticmethod
     def load_model_pipeline():
+        """Loads a model pipeline from a specified dir"""
         # Load config
-        parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+        parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         with open(os.path.join(parent_dir, 'config.yaml'), 'r', encoding='utf-8') as config_file:
             config = yaml.safe_load(config_file)  # Load config file
         # Load model pipeline using config
         return joblib.load(
             os.path.abspath(
                 os.path.join(
-                    os.path.dirname(__file__), '..', '..', config['output']['model_path']
+                    os.path.dirname(__file__), '..', config['output']['model_path']
                 )
             )
         )
 
     # Perform unit test
     def test_inference(self):
+        """Tests model inference on an obvious example"""
         # Create an inference dictionary that should give us a result of 1
         inference_df = pd.DataFrame(
             [

@@ -1,0 +1,25 @@
+# UCI Repo
+uci_repo:
+  uci_repo_code: 222
+
+# Data Configuration
+data:
+  raw_data_path: data/raw_training_data.csv
+  train_data_path: data/train.csv
+  test_data_path: data/test.csv
+
+# Model Configuration
+model:
+  hyperparameters:
+    C: 0.5
+    random_state: 420
+
+# Output Configuration
+output:
+  model_path: models/model/model_pipeline.joblib
+  model_performance_path: models/model_performance/model_metrics.json
+
+# App Configuration
+app:
+  app_input_schema_path: app/app_input_schema.json
+  chrome_driver_path: app/chromedriver.exe

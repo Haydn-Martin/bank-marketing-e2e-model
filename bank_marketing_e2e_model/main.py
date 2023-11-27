@@ -7,7 +7,6 @@ to make inferences on inputted data.
 """
 
 
-import os
 import json
 import yaml
 import joblib
@@ -15,14 +14,13 @@ import pandas as pd
 
 import streamlit as st
 
-from src.data.raw_data_gen import FetchUCIData, SaveRawTrainingData
+from src.data.raw_data_gen import FetchUCIData
 from src.modelling.model_training import TrainingPipeline
 from src.modelling.model_evaluation import EvaluationPipeline
 
 
 # Load config
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # Get parent dir
-with open(os.path.join(parent_dir, 'config.yaml'), 'r', encoding='utf-8') as config_file:
+with open('config.yaml', 'r', encoding='utf-8') as config_file:
     config = yaml.safe_load(config_file)  # Load config file
 
 # Page Title
@@ -41,10 +39,7 @@ if st.button('Import'):
         st.success('Raw data successfully imported!')
         st.write(uci_data)
         # Save formatted data
-        SaveRawTrainingData(
-            raw_training_df=uci_data,
-            raw_data_store_path=config['data']['raw_data_path']
-        ).save_raw_training_data()
+        uci_data.to_csv(config['data']['raw_data_path'])
     except Exception as e:
         st.error(f"An error occurred in saving UCI data: {e}")
 
@@ -77,9 +72,9 @@ if st.button('Evaluate Current Model'):
     try:
         # Evaluate current model and save evaluation metric
         EvaluationPipeline(
-            model_pipeline=config['data']['model_path'],
+            model_pipeline=config['output']['model_path'],
             test_data_path=config['data']['test_data_path'],
-            model_metrics_path=config['output']['model_metrics_path']
+            model_metrics_path=config['output']['model_performance_path']
         ).save_model_performance()
         # Load metrics JSON as dict
         with open(
@@ -113,11 +108,13 @@ for feature in input_schema.keys():
         feature_value = st.number_input(label=feature,
                                         step=1,
                                         format='%i')
-    if input_schema[feature]['type'] == 'object':
+    elif input_schema[feature]['type'] == 'object':
         feature_value = st.selectbox(
             label=feature,
             options=input_schema[feature]['properties']['categorical_column']['enum']
         )
+    else:
+        feature_value = pd.NA
     new_data[feature] = feature_value
 
 # Make a prediction using these inputs
@@ -132,8 +129,10 @@ if st.button('Predict'):
         # Format prediction
         if prediction[0] == 0:
             PRED_DISPLAY = 'This customer will subscribe.'
-        if prediction[0] == 1:
+        elif prediction[0] == 1:
             PRED_DISPLAY = 'This customer will not subscribe.'
+        else:
+            PRED_DISPLAY = 'No prediction.'
         # Display the prediction
         st.success(PRED_DISPLAY)
     except Exception as e:

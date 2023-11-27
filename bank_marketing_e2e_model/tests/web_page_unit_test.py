@@ -16,12 +16,17 @@ from selenium.webdriver.common.by import By
 
 class WebPageDropUnitTest(unittest.TestCase):
     """
-    This class specifies the drop-down unit test
-    for the streamlit web page.
+    A class to perform a unit test on the web page.
+
+    Methods:
+        setUp: Load chrome driver
+        test_web_page: Tests web page by selecting a feature category
+        tearDown: Close chrome driver
     """
 
     # Set up
     def setUp(self):
+        """Load chrome driver"""
         # Set driver
         self.driver = webdriver.Chrome()
         # Set local url
@@ -29,6 +34,7 @@ class WebPageDropUnitTest(unittest.TestCase):
 
     # Perform unit test
     def test_web_page(self):
+        """Tests web page by selecting a feature category"""
         # Start the web driver
         driver = self.driver
         # Open the Streamlit app
@@ -58,6 +64,7 @@ class WebPageDropUnitTest(unittest.TestCase):
 
     # Close web page
     def tearDown(self):
+        """Close chrome driver"""
         self.driver.quit()
 
 
