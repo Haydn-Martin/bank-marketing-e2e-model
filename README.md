@@ -4,7 +4,10 @@ This repo creates a basic end-to-end inference pipeline.
 
 We import data from UCI, transform and save this data, use it to train and evaluate a model, and allow users to make inferences using this model.
 
+<div align="center">
 <img width="378" alt="image" src="https://github.com/Haydn-Martin/bank-marketing-e2e-model/assets/76120434/5b2b5b33-8e60-4cae-8253-b4250a185c95">
+<p>Streamlit webpage UI screenshot</p>
+</div>
 
 ## Description
 
