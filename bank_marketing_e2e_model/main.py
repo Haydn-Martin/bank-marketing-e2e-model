@@ -7,6 +7,7 @@ to make inferences on inputted data.
 """
 
 
+import logging
 import json
 import yaml
 import joblib
@@ -18,6 +19,15 @@ from src.data.raw_data_gen import FetchUCIData
 from src.modelling.model_training import TrainingPipeline
 from src.modelling.model_evaluation import EvaluationPipeline
 
+
+# Configure logging
+if not any(isinstance(handler, logging.StreamHandler) for handler in logging.getLogger().handlers):
+    logging.basicConfig(
+        format='%(asctime)s--[%(levelname)s]--%(message)s',
+        level=logging.INFO
+    )
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
 
 # Load config
 with open('config.yaml', 'r', encoding='utf-8') as config_file:
@@ -40,8 +50,12 @@ if st.button('Import'):
         st.write(uci_data)
         # Save formatted data
         uci_data.to_csv(config['data']['raw_data_path'])
+        # Log the success
+        logging.info('Raw data imported and saved.')
+    # Output error to user and developer
     except Exception as e:
         st.error(f"An error occurred in saving UCI data: {e}")
+        logging.error(f"An error occurred in saving UCI data: {e}")
 
 # Import data button and description
 st.subheader('Train ML Model')
@@ -60,8 +74,12 @@ if st.button('Train'):
         ).save_model()
         # Success message
         st.success('New model trained!')
+        # Log the success
+        logging.info('Model trained and saved.')
+    # Output error to user and developer
     except Exception as e:
         st.error(f"An error occurred in training the model: {e}")
+        logging.error(f"An error occurred in training the model: {e}")
 
 # Import data button and description
 st.subheader('Evaluate Trained Model')
@@ -84,15 +102,18 @@ if st.button('Evaluate Current Model'):
         ) as metrics_json:
             metrics_dict = json.load(metrics_json)
         # Return metrics
-        st.success(f'Current model has an roc_auc score of {metrics_dict["roc_auc"]}')
+        st.success(f"Current model has an roc_auc score of {metrics_dict['roc_auc']}")
+        # Log the success
+        logging.info('Model evaluated and performance saved.')
+    # Output error to user and developer
     except Exception as e:
         st.error(f"An error occurred in evaluating the model: {e}")
+        logging.error(f"An error occurred in evaluating the model: {e}")
 
 # Import data button and description
 st.subheader('Make Predictions')
 # Add description
 st.write('Use saved model to make predictions on new data inputs.')
-
 # Load input schema to make a prediction
 with open(
         config['app']['app_input_schema_path'],
@@ -108,6 +129,7 @@ for feature in input_schema.keys():
         feature_value = st.number_input(label=feature,
                                         step=1,
                                         format='%i')
+    # Categorical features
     elif input_schema[feature]['type'] == 'object':
         feature_value = st.selectbox(
             label=feature,
@@ -115,8 +137,8 @@ for feature in input_schema.keys():
         )
     else:
         feature_value = pd.NA
+    # Add feature to dict
     new_data[feature] = feature_value
-
 # Make a prediction using these inputs
 if st.button('Predict'):
     try:
@@ -124,6 +146,9 @@ if st.button('Predict'):
         loaded_model_pipe = joblib.load(config['output']['model_path'])
         # Create a pandas df with the user inputs
         inference_df = pd.DataFrame([new_data])
+        # Log the features selected
+        for feature, feature_value in new_data.items():
+            logging.info(f"Value for feature {feature} selected was {feature_value}.")
         # Make a prediction using the loaded pipeline
         prediction = loaded_model_pipe.predict(inference_df)
         # Format prediction
@@ -135,5 +160,9 @@ if st.button('Predict'):
             PRED_DISPLAY = 'No prediction.'
         # Display the prediction
         st.success(PRED_DISPLAY)
+        # Log the success
+        logging.info(f"Prediction made successfully: {PRED_DISPLAY}")
+    # Output error to user and developer
     except Exception as e:
         st.error(f"An error occurred in making a prediction: {e}")
+        logging.error(f"An error occurred in making a prediction: {e}")

@@ -6,4 +6,5 @@ disable=
     relative-beyond-top-level,
     too-many-arguments,
     use-dict-literal,
-    import-error
+    import-error,
+    logging-fstring-interpolation
